@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Dottor Stranamore - Lettura Tarocchi Intuitiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #1a202c; /* Grigio Antracite Scuro */
+            color: #e2e8f0; /* Grigio Chiaro per testo */
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-bg {
+            /* IMMAGINE DI SFONDO HERO SECTION: Sostituisci con il nome del tuo file o lascialo se vuoi usare lo stesso del logo */
+            background-image: url('NOME_DEL_TUO_FILE_IMMAGINE_DI_SFONDO.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative; /* Necessario per l'overlay */
+        }
+        .hero-bg::before { /* Overlay per migliorare leggibilità testo */
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(26, 32, 44, 0.65); /* Grigio Antracite Scuro con opacità */
+            z-index: 1;
+        }
+        .hero-content { /* Contenuto della hero section sopra l'overlay */
+            position: relative;
+            z-index: 2;
+        }
+        .bg-brand-primary { background-color: #2c5282; } /* Blu dal logo (maglietta) */
+        .text-brand-primary { color: #2c5282; }
+        .border-brand-primary { border-color: #2c5282; }
+
+        .bg-brand-accent-red { background-color: #dd6b20; } /* Rosso/Arancio dal logo (testo "Stranamore") */
+        .text-brand-accent-red { color: #dd6b20; }
+        .hover\:bg-brand-accent-red-dark:hover { background-color: #c05621; }
+
+        .bg-brand-accent-yellow { background-color: #f6e05e; } /* Giallo/Ocra dal logo (carte, testo "il dottor") */
+        .text-brand-accent-yellow { color: #f6e05e; }
+        .border-brand-accent-yellow { border-color: #f6e05e; }
+
+        .card-service {
+            background-color: #2d3748; /* Grigio leggermente più chiaro per le card */
+            border-left-width: 4px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-service:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(221, 107, 32, 0.2);
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-red {
+            background-color: #dd6b20; /* Rosso/Arancio */
+            color: white;
+        }
+        .btn-red:hover {
+            background-color: #c05621; /* Rosso/Arancio più scuro */
+            transform: scale(1.05);
+        }
+        .btn-outline-yellow {
+            background-color: transparent;
+            border: 2px solid #f6e05e; /* Giallo/Ocra */
+            color: #f6e05e;
+        }
+        .btn-outline-yellow:hover {
+            background-color: #f6e05e;
+            color: #1a202c; /* Scuro per contrasto */
+            transform: scale(1.05);
+        }
+
+        /* Per far sì che il logo mantenga le proporzioni e non sia troppo grande */
+        .logo-img {
+            max-width: 200px; /* Regola questa dimensione se necessario */
+            height: auto;   /* Mantiene l'aspect ratio */
+        }
+         @media (max-width: 768px) {
+            .logo-img {
+                max-width: 150px;
+            }
+        }
+
+        /* Stile per modale di conferma invio form */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+        .modal-content {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            margin: 15% auto;
+            padding: 25px;
+            border: 1px solid #4a5468;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-slate-800/80 backdrop-blur-md shadow-lg sticky top-0 z-50 py-3">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#">
+                <img src="Printable resolution file.jpg" alt="Logo Il Dottor Stranamore" class="logo-img">
+            </a>
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="#servizi" class="text-gray-300 hover:text-brand-accent-yellow transition duration-300">Servizi</a>
+                <a href="#prenota" class="text-gray-300 hover:text-brand-accent-yellow transition duration-300">Prenota</a>
+                <a href="tel:+393288028076" class="btn btn-red text-sm">Chiama Ora: 328 8028076</a>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobileMenuButton" class="text-gray-300 focus:outline-none">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-800/95">
+            <a href="#servizi" class="block text-gray-300 hover:text-brand-accent-yellow transition duration-300 px-6 py-3 border-b border-slate-700">Servizi</a>
+            <a href="#prenota" class="block text-gray-300 hover:text-brand-accent-yellow transition duration-300 px-6 py-3 border-b border-slate-700">Prenota</a>
+            <a href="tel:+393288028076" class="block text-brand-accent-red hover:text-white transition duration-300 px-6 py-3 font-semibold">Chiama Ora: 328 8028076</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg">
+        <div class="hero-content min-h-[60vh] md:min-h-[70vh] flex items-center justify-center text-center p-6">
+            <div>
+                <h1 class="font-playfair text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+                    Il Dottor Stranamore
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto">
+                    Letture di Tarocchi intuitive per illuminare il tuo cammino in amore, lavoro e crescita personale.
+                </p>
+                <a href="#servizi" class="btn btn-red text-lg">Scopri i Consulti</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intro Dottore -->
+    <section class="py-16 md:py-24 bg-slate-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-playfair text-3xl md:text-4xl font-bold text-white mb-6">Conosci il Dottor Stranamore</h2>
+            <div class="max-w-3xl mx-auto">
+                <p class="text-gray-300 text-lg mb-4">
+                    Ciao, sono il Dottor Stranamore. Con passione e dedizione, utilizzo l'antica saggezza dei Tarocchi per offrirti una guida chiara e personalizzata.
+                    Il mio approccio è empatico e diretto, mirato a fornirti non solo risposte, ma anche una nuova prospettiva per affrontare le sfide e cogliere le opportunità della vita.
+                </p>
+                <p class="text-gray-300 text-lg">
+                    Se cerchi chiarezza nelle questioni di cuore, indicazioni per la tua carriera o un aiuto nel tuo percorso di crescita interiore, sei nel posto giusto.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sezione Servizi -->
+    <section id="servizi" class="py-16 md:py-24">
+        <div class="container mx-auto px-6">
+            <h2 class="font-playfair text-3xl md:text-4xl font-bold text-white text-center mb-12">I Miei Consulti</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
+                <!-- Servizio 1: WhatsApp -->
+                <div class="card-service border-brand-accent-red p-6 md:p-8 rounded-lg shadow-xl">
+                    <h3 class="font-playfair text-2xl md:text-3xl font-bold text-white mb-3">Consulto WhatsApp Express</h3>
+                    <p class="text-brand-accent-yellow font-bold text-3xl md:text-4xl mb-4">15€</p>
+                    <ul class="text-gray-300 space-y-2 mb-6 text-left">
+                        <li class="flex items-start"><span class="text-brand-accent-red mr-2 mt-1">&#10004;</span> 3 Domande specifiche</li>
+                        <li class="flex items-start"><span class="text-brand-accent-red mr-2 mt-1">&#10004;</span> Risposte tramite messaggi vocali</li>
+                        <li class="flex items-start"><span class="text-brand-accent-red mr-2 mt-1">&#10004;</span> Diretto e veloce, su WhatsApp</li>
+                        <li class="flex items-start"><span class="text-brand-accent-red mr-2 mt-1">&#10004;</span> Numero: <a href="https://wa.me/393288028076" target="_blank" class="hover:underline font-semibold">328 8028076</a></li>
+                    </ul>
+                    <a href="https://wa.me/393288028076?text=Ciao%20Dottor%20Stranamore,%20vorrei%20prenotare%20il%20Consulto%20WhatsApp%20Express%20da%2015%E2%82%AC." target="_blank" class="btn btn-red w-full">Contattami su WhatsApp</a>
+                </div>
+
+                <!-- Servizio 2: Chiamata/Video -->
+                <div class="card-service border-brand-accent-yellow p-6 md:p-8 rounded-lg shadow-xl">
+                    <h3 class="font-playfair text-2xl md:text-3xl font-bold text-white mb-3">Consulto Approfondito</h3>
+                    <p class="text-brand-accent-red font-bold text-3xl md:text-4xl mb-4">35€</p>
+                     <ul class="text-gray-300 space-y-2 mb-6 text-left">
+                        <li class="flex items-start"><span class="text-brand-accent-yellow mr-2 mt-1">&#10004;</span> 30 Minuti di consulto dedicato</li>
+                        <li class="flex items-start"><span class="text-brand-accent-yellow mr-2 mt-1">&#10004;</span> In chiamata o videochiamata</li>
+                        <li class="flex items-start"><span class="text-brand-accent-yellow mr-2 mt-1">&#10004;</span> Analisi dettagliata della situazione</li>
+                        <li class="flex items-start"><span class="text-brand-accent-yellow mr-2 mt-1">&#10004;</span> Spazio per domande e chiarimenti</li>
+                    </ul>
+                    <a href="#prenota" class="btn btn-outline-yellow w-full">Prenota il Tuo Consulto</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sezione Prenota -->
+    <section id="prenota" class="py-16 md:py-24 bg-slate-800">
+        <div class="container mx-auto px-6">
+            <h2 class="font-playfair text-3xl md:text-4xl font-bold text-white text-center mb-12">Prenota il Tuo Consulto</h2>
+            <div class="max-w-3xl mx-auto bg-slate-700 p-8 rounded-lg shadow-2xl">
+                <p class="text-gray-200 text-lg text-center mb-6">
+                    Scegli la modalità che preferisci per prenotare la tua lettura con Il Dottor Stranamore:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-slate-600 p-6 rounded-lg text-center">
+                        <h3 class="font-playfair text-xl font-bold text-white mb-3">Contatto Telefonico / WhatsApp</h3>
+                        <p class="text-gray-300 mb-4">Chiamami o invia un messaggio per concordare giorno e ora.</p>
+                        <a href="tel:+393288028076" class="btn btn-red w-full text-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                            </svg>
+                            328 8028076
+                        </a>
+                    </div>
+                    <div class="bg-slate-600 p-6 rounded-lg text-center">
+                        <h3 class="font-playfair text-xl font-bold text-white mb-3">Tramite Email</h3>
+                        <p class="text-gray-300 mb-4">Compila il form per inviare la tua richiesta di prenotazione.</p>
+                        <button onclick="document.getElementById('contactFormSection').scrollIntoView({behavior: 'smooth'});" class="btn btn-outline-yellow w-full text-lg">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            Compila il Form
+                        </button>
+                    </div>
+                </div>
+                <p class="text-gray-400 text-sm text-center">
+                    Per le prenotazioni via email, indica le tue preferenze di giorno e orario, ti risponderò al più presto per la conferma.
+                </p>
+            </div>
+
+            <!-- Modulo Contatti per Email -->
+            <div id="contactFormSection" class="max-w-2xl mx-auto bg-slate-700 p-8 mt-12 rounded-lg shadow-2xl">
+                <h3 class="font-playfair text-2xl font-bold text-white text-center mb-6">Richiesta Prenotazione via Email</h3>
+                <form id="bookingForm" action="mailto:mceccarelli79@gmail.com" method="post" enctype="text/plain">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Il Tuo Nome:</label>
+                        <input type="text" id="name" name="Nome" required class="w-full px-4 py-2.5 rounded-lg bg-slate-600 text-gray-200 border border-slate-500 focus:outline-none focus:border-brand-accent-yellow focus:ring-1 focus:ring-brand-accent-yellow" placeholder="Mario Rossi">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-300 text-sm font-bold mb-2">La Tua Email:</label>
+                        <input type="email" id="email" name="Email" required class="w-full px-4 py-2.5 rounded-lg bg-slate-600 text-gray-200 border border-slate-500 focus:outline-none focus:border-brand-accent-yellow focus:ring-1 focus:ring-brand-accent-yellow" placeholder="tua@email.com">
+                    </div>
+                    <div class="mb-4">
+                        <label for="service_type" class="block text-gray-300 text-sm font-bold mb-2">Tipo di Consulto Desiderato:</label>
+                        <select id="service_type" name="Tipo_Consulto" class="w-full px-4 py-2.5 rounded-lg bg-slate-600 text-gray-200 border border-slate-500 focus:outline-none focus:border-brand-accent-yellow focus:ring-1 focus:ring-brand-accent-yellow">
+                            <option value="Consulto Approfondito (35 Euro)">Consulto Approfondito Chiamata/Video (35€)</option>
+                            <option value="Consulto WhatsApp Express (15 Euro)">Consulto WhatsApp Express (15€)</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="preferred_day" class="block text-gray-300 text-sm font-bold mb-2">Giorno Preferito per il Consulto:</label>
+                        <input type="text" id="preferred_day" name="Giorno_Preferito" class="w-full px-4 py-2.5 rounded-lg bg-slate-600 text-gray-200 border border-slate-500 focus:outline-none focus:border-brand-accent-yellow focus:ring-1 focus:ring-brand-accent-yellow" placeholder="Es. Lunedì, Martedì pomeriggio">
+                    </div>
+                    <div class="mb-4">
+                        <label for="preferred_time" class="block text-gray-300 text-sm font-bold mb-2">Orario Preferito:</label>
+                        <input type="text" id="preferred_time" name="Orario_Preferito" class="w-full px-4 py-2.5 rounded-lg bg-slate-600 text-gray-200 border border-slate-500 focus:outline-none focus:border-brand-accent-yellow focus:ring-1 focus:ring-brand-accent-yellow" placeholder="Es. Mattina, Dopo le 18:00">
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-300 text-sm font-bold mb-2">Eventuali Note o Domande (opzionale):</label>
+                        <textarea id="message" name="Messaggio" rows="3" class="w-full px-4 py-2.5 rounded-lg bg-slate-600 text-gray-200 border border-slate-500 focus:outline-none focus:border-brand-accent-yellow focus:ring-1 focus:ring-brand-accent-yellow" placeholder="Scrivi qui..."></textarea>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Invia Richiesta Email" class="btn btn-red text-lg cursor-pointer" onclick="showConfirmationModal()">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-gray-400 py-12 text-center">
+        <div class="container mx-auto px-6">
+            <img src="Printable resolution file.jpg" alt="Logo Il Dottor Stranamore" class="logo-img mx-auto mb-4 opacity-70">
+            <p class="font-playfair text-xl text-white mb-2">Il Dottor Stranamore</p>
+            <p class="mb-1">Lettura Tarocchi Intuitiva</p>
+            <p class="text-sm mb-1">Email: <a href="mailto:mceccarelli79@gmail.com" class="hover:text-brand-accent-yellow">mceccarelli79@gmail.com</a></p>
+            <p class="text-sm mb-4">Tel/WhatsApp: <a href="tel:+393288028076" class="hover:text-brand-accent-yellow">328 8028076</a></p>
+            <p class="text-xs">&copy; <span id="currentYear"></span> Il Dottor Stranamore. Tutti i diritti riservati.</p>
+            <p class="text-xs mt-1">P.IVA (se presente, da inserire)</p>
+        </div>
+    </footer>
+
+    <!-- Modale di Conferma Invio Email -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeConfirmationModal()">&times;</span>
+            <h3 class="font-playfair text-xl font-bold text-white mb-3">Richiesta Inviata!</h3>
+            <p class="text-gray-300 mb-4">La tua richiesta di prenotazione sta per essere inviata tramite il tuo programma di posta elettronica. Assicurati di completare l'invio.</p>
+            <p class="text-gray-300 mb-4">Riceverai una risposta da mceccarelli79@gmail.com al più presto.</p>
+            <button onclick="closeConfirmationModal()" class="btn btn-red">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Menu Mobile
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Chiudi menu mobile se si clicca su un link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Anno Corrente per Footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Modale di conferma per l'invio dell'email
+        const confirmationModal = document.getElementById('confirmationModal');
+        function showConfirmationModal() {
+            // Il timeout serve per dare tempo al client email di aprirsi prima che il modale appaia
+            // Potrebbe non essere perfetto su tutti i browser/client
+            setTimeout(() => {
+                 confirmationModal.style.display = "block";
+            }, 500); // Aspetta mezzo secondo
+        }
+        function closeConfirmationModal() {
+            confirmationModal.style.display = "none";
+        }
+        // Chiudi modale se si clicca fuori
+         window.onclick = function(event) {
+            if (event.target == confirmationModal) {
+                closeConfirmationModal();
+            }
+        }
+
+        // Gestione invio form (solo per dare feedback, l'invio reale è gestito da mailto:)
+        const bookingForm = document.getElementById('bookingForm');
+        bookingForm.addEventListener('submit', function(event) {
+            // Non preveniamo il default perché vogliamo che il mailto: funzioni
+            // event.preventDefault();
+            
+            // Mostra il modale di conferma
+            // La funzione showConfirmationModal() viene chiamata dall'attributo onclick del bottone submit
+        });
+
+    </script>
+
+</body>
+</html>
